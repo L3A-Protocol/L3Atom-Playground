@@ -12,6 +12,7 @@ import {
 } from 'chart.js';
 import { Line, Pie } from 'react-chartjs-2';
 import './App.css';
+import NavBar from './components/NavBar';
 
 ChartJS.register(
   CategoryScale,
@@ -27,7 +28,7 @@ ChartJS.register(
   ArcElement
 )
 
-const options = {
+const lineOptions = {
   color: 'rgb(255,255,255)',
   plugins: {
     legend: {
@@ -57,6 +58,21 @@ const options = {
       }
     }
   },
+};
+
+const pieOptions = {
+  color: 'rgb(255,255,255)',
+  plugins: {
+    legend: {
+      position: 'top',
+    },
+    title: {
+      display: true,
+      text: 'Number of LOB Events',
+      color: "white"
+    },
+  },
+
 };
 
 const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
@@ -96,12 +112,17 @@ const pieData = {
 }
 
 export default function App() {
-  return <div className="charts-container"> 
-      <div className="line-chart-container">
-        <Line className="test-chart" options={options} data={lineData} />
-      </div>
-      <div>
-        <Pie data={pieData}/>
+  return (
+    <div className="App">
+      <NavBar />
+      <div className="charts-container"> 
+        <div className="line-chart-container">
+          <Line className="test-chart" options={lineOptions} data={lineData} />
+        </div>
+        <div className="LOB-ratio-container">
+          <Pie options={pieOptions} data={pieData}/>
+        </div>
       </div>
     </div>
+  )
 }

@@ -25,12 +25,14 @@
 }
 
 .charts-container {
+  display: flex;
+  flex-direction: row;
   justify-content: space-around;
   align-items: center;
   height: 100%;
   background-color: #282c34;
-  padding: 100px;
-  margin: 20%;
+  padding: 10px;
+  margin: 7%;
 }
 
 .line-chart-container {
@@ -41,6 +43,27 @@
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 25px 15px 20px 0 rgba(0, 0, 0, 0.59);
 }
 
-.test-chart {
-  
+.LOB-ratio-container {
+  background-color: #353a44;
+  margin: 20px 20px 20px 20px;
+  padding: 2%;
+  border-radius: 4%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 25px 15px 20px 0 rgba(0, 0, 0, 0.59);
+}
+
+.gda-logo {
+  height: 7%;
+  width: 7%;
+}
+
+.navbar {
+  background: linear-gradient(to right, #06284e, #000000);
+  border-bottom: 3px solid #ffffff!important;
+}
+
+.title {
+  color: #ffffff;
+  margin-left: 2%!important;
+  font-size: 2em!important;
+  font-weight: bold!important;
 }

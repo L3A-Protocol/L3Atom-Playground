@@ -52,14 +52,15 @@ export default function App() {
     let newTotalData = []
     let newLineData = {}
     // console.log(symbolChoices[0].value)
+    const colours = exchangeChoices.map(choice => random_rgba())
     for (let symbol of symbolChoices) {
       console.log(symbol.value)
       newLineData = Object.assign({}, defaultLineData)
-      newLineData.datasets = exchangeChoices.map(option => {
+      newLineData.datasets = exchangeChoices.map((option, index) => {
         let res = {
           symbol: symbol.value,
           label: option.label,
-          backgroundColor: random_rgba(),
+          backgroundColor: colours[index],
           data: []
         }
         res.borderColor = res.backgroundColor

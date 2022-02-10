@@ -1,99 +1,18 @@
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  registerables,
-  ArcElement,
-} from 'chart.js';
-import { Line, Pie } from 'react-chartjs-2';
+
 import './App.css';
 import NavBar from './components/NavBar';
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-);
-
-ChartJS.register(
-  ArcElement
-)
-
-const lineOptions = {
-  color: 'rgb(255,255,255)',
-  plugins: {
-    legend: {
-      position: 'top',
-    },
-    title: {
-      display: true,
-      text: 'Mid Price(BTC/USDT)',
-      color: "white"
-    },
-  },
-  scales: {
-    x: {
-      ticks: {
-        color: "white"
-      },
-      grid: {
-        color: "rgba(255,255,255,0.2)"
-      }
-    },
-    y: {
-      ticks: {
-        color: "white"
-      },
-      grid: {
-        color: "rgba(255,255,255,0.2)"
-      }
-    }
-  },
-};
-
-const pieOptions = {
-  color: 'rgb(255,255,255)',
-  plugins: {
-    legend: {
-      position: 'top',
-    },
-    title: {
-      display: true,
-      text: 'Number of LOB Events',
-      color: "white"
-    },
-  },
-
-};
+import DataSelector from './components/DataSelector';
+import Charts from './components/Charts';
+import {useState} from 'react';
+import { Button } from '@mui/material';
+import 'react-tabs/style/react-tabs.css';
 
 const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
 
-const lineData = {
+const defaultLineData = {
   labels,
   defaultFontColor: "rgb(255, 255, 255)",
-  datasets: [
-    {
-      label: 'Binance',
-      data: [54, 32, 54, 20, 56, 33, 51],
-      borderColor: 'rgb(255, 99, 132)',
-      backgroundColor: 'rgba(255, 99, 132, 0.5)',
-    },
-    {
-      label: 'Coinbase',
-      data: [37, 41, 96, 54, 32, 57, 39],
-      borderColor: 'rgb(53, 162, 235)',
-      backgroundColor: 'rgba(53, 162, 235, 0.5)',
-    },
-  ],
+  datasets: [],
 };
 
 const pieData = {
@@ -111,18 +30,57 @@ const pieData = {
   ]
 }
 
+function random_rgba() {
+  var o = Math.round, r = Math.random, s = 255;
+  return 'rgb(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ')';
+}
+
 export default function App() {
+
+  const [exchangeChoices, setExchangeChoices] = useState([])
+  const [symbolChoices, setSymbolChoices] = useState([])
+  const [lineData, setLineData] = useState([defaultLineData])
+
+  const handleExchangeChange = (newSelectedOptions) => {
+    setExchangeChoices(newSelectedOptions)
+  }
+  const handleSymbolChange = (newSelectedOptions) => {
+    setSymbolChoices(newSelectedOptions)
+  }
+
+  const subscribe = () => {
+    let newTotalData = []
+    let newLineData = {}
+    // console.log(symbolChoices[0].value)
+    for (let symbol of symbolChoices) {
+      console.log(symbol.value)
+      newLineData = Object.assign({}, defaultLineData)
+      newLineData.datasets = exchangeChoices.map(option => {
+        let res = {
+          symbol: symbol.value,
+          label: option.label,
+          backgroundColor: random_rgba(),
+          data: []
+        }
+        res.borderColor = res.backgroundColor
+        for (let i = 0; i < 7; i++) {
+          res.data.push(Math.floor(Math.random() * 100))
+        }
+        return res
+      })
+      newTotalData.push(newLineData)
+    }
+    setLineData(newTotalData)
+    console.log(newTotalData)
+}
+
   return (
     <div className="App">
       <NavBar />
-      <div className="charts-container"> 
-        <div className="line-chart-container">
-          <Line className="test-chart" options={lineOptions} data={lineData} />
-        </div>
-        <div className="LOB-ratio-container">
-          <Pie options={pieOptions} data={pieData}/>
-        </div>
-      </div>
+      <DataSelector handleExchangeChange={handleExchangeChange} handleSymbolChange={handleSymbolChange} />
+      {/* {console.log(exchangeChoices)} */}
+      <Button color="error" variant="contained" onClick={subscribe}>Subscribe</Button>
+      <Charts lineData={lineData} pieData={pieData} symbolChoices={symbolChoices} />
     </div>
   )
 }

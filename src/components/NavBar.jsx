@@ -5,9 +5,11 @@ import Toolbar from '@mui/material/Toolbar'
 
 export default function NavBar() {
   return (
-    <AppBar position="static" className="navbar">
+    <AppBar className="navbar">
         <Toolbar disableGutters>
-            <img className="gda-logo" src={require('../images/GDA_logo.png')} alt="GDA logo"/>
+            <Typography variant="h5" className="logo">
+              G
+            </Typography>
             <Typography variant="h6" className="title">
                 L3 Atom Playground
             </Typography>

@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import Select from 'react-select'
+import { Typography } from '@mui/material'
 
 const exchangeOptions = [
   { value: 'coinbase', label: 'Coinbase' },
@@ -48,7 +49,13 @@ export default function DataSelector(props) {
 
   return (
     <div className="select-container">
+      <Typography variant="h6" className="title">
+        Select Exchange(s)
+      </Typography>
       <Select isMulti options={exchangeOptions} onChange={props.handleExchangeChange}/>
+      <Typography variant="h6" className="title">
+        Select Symbol(s)
+      </Typography>
       <Select options={totalSymbolOptions} onChange={props.handleSymbolChange} isMulti />
     </div>
   )

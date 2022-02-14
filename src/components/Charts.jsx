@@ -63,22 +63,6 @@ const lineOptions = {
       }
     },
   };
-  
-  const pieOptions = {
-    responsive: true,
-    color: 'rgb(255,255,255)',
-    plugins: {
-      legend: {
-        position: 'top',
-      },
-      title: {
-        display: true,
-        text: 'Number of LOB Events',
-        color: "white"
-      },
-    },
-  
-  };
 
 export default function Charts(props) {
 
@@ -108,12 +92,6 @@ export default function Charts(props) {
                 </TabList>
                 {props.lineData.map(data => <TabPanel><Line data={data} options={lineOptions} /></TabPanel>)}
             </Tabs>
-        </div>
-        <div className="LOB-ratio-container">
-            <Pie key={props.lobEventCount} options={pieOptions} data={pieData}/>
-        </div>
-        <div className="market-order-container">
-            <MarketOrderTable rows={props.marketOrders} />
         </div>
         
     </div>

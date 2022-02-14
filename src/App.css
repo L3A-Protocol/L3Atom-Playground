@@ -25,13 +25,12 @@
 }
 
 .charts-container {
-  display: flex;
+  /* display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  background-color: #282c34;
   padding: 10px;
-  border-radius: 2%;
+  border-radius: 2%; */
 }
 
 .line-chart-container {
@@ -70,16 +69,17 @@
 }
 
 .select-container {
-  margin-top: auto;
-  margin-bottom: auto;
+  /* margin-top: auto;
+  margin-bottom: auto; */
+  line-height: 2.6;
 }
 
 .market-order-container {
-  background-color: #353a44;
+  /* background-color: #353a44;
   margin: 2px;
   padding: 2%;
   border-radius: 4%;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 25px 15px 20px 0 rgba(0, 0, 0, 0.59);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 25px 15px 20px 0 rgba(0, 0, 0, 0.59); */
 }
 
 .market-order-row {
@@ -88,20 +88,18 @@
 }
 
 .output-container {
-  padding: 5px;
-  /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 25px 15px 20px 0 rgba(0, 0, 0, 0.59); */
-  margin-left: auto;
-  margin-right: auto;
-  justify-content: center;
-  align-items: center;
-  display: flex;
 }
 
 .data-container {
-  display: flex;
-  margin-top: 5%;
-  width: 80%;
-  margin-left: 10%;
-  margin-right: 10%;
+  margin-top: 5%!important;
+  width: 90%!important;
+  margin-left: 5%!important;
+  margin-right: 5%!important;
+  background-color: #282c34;
+}
 
+.metric {
+  color: #bababa;
+  font-size: 1.5em!important;
+  font-weight: bold!important;
 }

@@ -8,7 +8,9 @@ export default function NavBar() {
     <AppBar className="navbar">
         <Toolbar disableGutters>
             <Typography variant="h5" className="logo">
-              G
+              <a style={{textDecoration: "none", color: "white"}} href="https://www.gda.fund/">
+                G
+              </a>
             </Typography>
             <Typography variant="h6" className="title">
                 L3 Atom Playground

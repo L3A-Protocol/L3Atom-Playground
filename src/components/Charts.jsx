@@ -1,7 +1,9 @@
-import React from 'react';
+import React, {useEffect, useState, useMemo} from 'react';
 
 import { Line, Pie } from 'react-chartjs-2';
 import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
+
+import MarketOrderTable from './MarketOrderTable';
 
 import {
     Chart as ChartJS,
@@ -63,6 +65,7 @@ const lineOptions = {
   };
   
   const pieOptions = {
+    responsive: true,
     color: 'rgb(255,255,255)',
     plugins: {
       legend: {
@@ -78,19 +81,28 @@ const lineOptions = {
   };
 
 export default function Charts(props) {
+
+  const pieData = useMemo(() => {
+    return{
+      labels: ["Inserts", "Deletes",  "Updates"],
+      datasets: [
+        {
+          data: props.lobEventCount,
+          label: '# of events',
+          backgroundColor: [
+            'rgb(255, 99, 132)',
+            'rgb(54, 162, 235)',
+            'rgb(75,192,192)'
+          ]
+        }
+      ]
+    }
+  }, [props.lobEventCount]);
+
   return (
     <div className="charts-container"> 
         <div className="line-chart-container">
             <Tabs>
-                {/* <TabList>
-                    <Tab>Line Chart</Tab>
-                    <Tab>Pie Chart</Tab>
-                </TabList>
-                <TabPanel>
-                </TabPanel>
-                <TabPanel>
-                    <h2>Test panel 2</h2>
-                </TabPanel> */}
                 <TabList>
                     {props.symbolChoices.map(choice => <Tab>{choice.label}</Tab>)}
                 </TabList>
@@ -98,8 +110,12 @@ export default function Charts(props) {
             </Tabs>
         </div>
         <div className="LOB-ratio-container">
-            <Pie options={pieOptions} data={props.pieData}/>
+            <Pie key={props.lobEventCount} options={pieOptions} data={pieData}/>
         </div>
+        <div className="market-order-container">
+            <MarketOrderTable rows={props.marketOrders} />
+        </div>
+        
     </div>
   );
 }

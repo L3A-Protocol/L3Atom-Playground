@@ -25,27 +25,26 @@
 }
 
 .charts-container {
+  display: flex;
+  flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  height: 100%;
   background-color: #282c34;
   padding: 10px;
-  margin: 4% 7% 7% 7%;
   border-radius: 2%;
 }
 
 .line-chart-container {
   background-color: #353a44;
-  margin: 20px 20px 20px 20px;
+  margin: 2px;
   padding: 2%;
   border-radius: 4%;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 25px 15px 20px 0 rgba(0, 0, 0, 0.59);
-  min-height: auto;
 }
 
 .LOB-ratio-container {
   background-color: #353a44;
-  margin: 20px 20px 20px 20px;
+  margin: 2px;
   padding: 2%;
   border-radius: 4%;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 25px 15px 20px 0 rgba(0, 0, 0, 0.59);
@@ -71,8 +70,38 @@
 }
 
 .select-container {
-  margin-top: 100px;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.market-order-container {
+  background-color: #353a44;
+  margin: 2px;
+  padding: 2%;
+  border-radius: 4%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 25px 15px 20px 0 rgba(0, 0, 0, 0.59);
+}
+
+.market-order-row {
+  background-color: #353a44;
+  color: #ffffff!important;
+}
+
+.output-container {
+  padding: 5px;
+  /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 25px 15px 20px 0 rgba(0, 0, 0, 0.59); */
   margin-left: auto;
   margin-right: auto;
-  width: 20%;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+.data-container {
+  display: flex;
+  margin-top: 5%;
+  width: 80%;
+  margin-left: 10%;
+  margin-right: 10%;
+
 }

@@ -35,7 +35,7 @@ export default function MarketOrderTable(props) {
                             <TableCell className="market-order-row">{row.price}</TableCell>
                             <TableCell className="market-order-row">{row.size}</TableCell>
                             <TableCell className="market-order-row">{row.trade_id}</TableCell>
-                            <TableCell className="market-order-row">{row.timestamp}</TableCell>
+                            <TableCell className="market-order-row">{row.timestamp ? (new Date(row.timestamp)).getTime() : null}</TableCell>
                             <TableCell className="market-order-row" >{row.side && (row.side == 1 ? 'Buy' : 'Sell')}</TableCell>
                         </TableRow>
                     )

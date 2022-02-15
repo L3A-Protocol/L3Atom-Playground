@@ -1,8 +1,9 @@
 import React from 'react';
 
 import { Line, Pie } from 'react-chartjs-2';
+import 'chartjs-adapter-luxon';
 import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
-
+import zoomPlugin from 'chartjs-plugin-zoom';
 import MarketOrderTable from './MarketOrderTable';
 
 import {
@@ -16,6 +17,7 @@ import {
     Legend,
     registerables,
     ArcElement,
+    TimeScale,
   } from 'chart.js';
 
 ChartJS.register(
@@ -26,6 +28,8 @@ ChartJS.register(
     Title,
     Tooltip,
     Legend,
+    TimeScale,
+    zoomPlugin
   );
   
 ChartJS.register(
@@ -43,9 +47,20 @@ const lineOptions = {
         text: 'Mid Price',
         color: "white"
       },
+      zoom: {
+        zoom: {
+          wheel: {
+            enabled: true
+          }
+        },
+        pan: {
+          enabled: true
+        }
+      },
     },
     scales: {
       x: {
+        type: 'time',
         ticks: {
           color: "white"
         },

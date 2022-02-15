@@ -69,16 +69,24 @@ export default function App() {
     setSymbolChoices(newSelectedOptions)
   }
 
+  let updateMidPrices = () => {
+    const now = new Date();
+    bestBid && bestAsk && setMidPrices([...midPrices, [now, (bestBid.price + bestAsk.price) / 2]])
+  }
+
   useEffect(() => {
     l3WebSocket.onopen = () => {
       console.log("Connected to L3 WebSocket")
     }
-
     l3WebSocket.onmessage = async (message) => {
+      if (!subscribed) {
+        return null
+      }
       const data = JSON.parse(await message.data.text())
       setMessage(data)
       //console.log(pieData)
     }
+
   }, [])
 
   useEffect(() => {
@@ -96,14 +104,22 @@ export default function App() {
     if (marketOrders.length > 10) {
       setMarketOrders(marketOrders.slice(0, 10))
     }
-    console.log(marketOrders)
   }, [marketOrders])
 
   useEffect(() => {
+    updateMidPrices()
+  }, [bestBid, bestAsk])
+
+  useEffect(() => {
     if (!subscribed) {
-      return null
+      return;
     }
     if (message.trade_id != -1) {
+      for (const trade of marketOrders) {
+        if (trade.trade_id == message.trade_id) {
+          return null
+        }
+      }
       const trade = {
         order_id: message.order_id,
         trade_id: message.trade_id,
@@ -148,18 +164,16 @@ export default function App() {
           }
         }
       }
-
-      const now = new Date();
-      bestBid && bestAsk && setMidPrices([...midPrices, [now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds(), (bestBid.price + bestAsk.price) / 2]])
     }
   }, [message])
 
-  const unsubscribe = () => {
+  const unsubscribe = async () => {
     const subscribeMessage = {
       'op': 'unsubscribe',
       "topic": symbolChoices.value
     }
-    l3WebSocket.send(JSON.stringify(subscribeMessage))
+    await l3WebSocket.close()
+    await l3WebSocket.send(JSON.stringify(subscribeMessage))
     setSubscribed(false)
 
     let newLineData = {}
@@ -178,9 +192,7 @@ export default function App() {
       newLineData.labels.push(midPrice[0])
       newLineData.datasets[0].data.push(midPrice[1])
     }
-    console.log(newLineData)
     setLineData(newLineData)
-
   }
 
   const subscribe = () => {
@@ -199,7 +211,7 @@ export default function App() {
     <div className="App">
       <Grid container spacing={4} className="data-container">
         <NavBar />
-        <Grid item xs={5} md={3.5} className='select-container'>
+        <Grid item xs={5} md={3.5} className='select-grid-container'>
           <DataSelector handleExchangeChange={handleExchangeChange} handleSymbolChange={handleSymbolChange} />
           {/* {console.log(exchangeChoices)} */}
           <Button color="error" variant="contained" onClick={subscribe}>Subscribe</Button>
@@ -226,8 +238,6 @@ export default function App() {
         <Grid item xs={6} md={3.75}>
           <Charts lineData={lineData} lobEventCount={subscribed ? [0,0,0] : lobEventCount} symbolChoices={symbolChoices} />
           <LobRatioChart lobEventCount={subscribed ? [0,0,0] : lobEventCount}/>
-        </Grid>
-        <Grid item xs={4}>
         </Grid>
         <Grid item xs={12} md={12} className="market-order-container">
            <MarketOrderTable rows={marketOrders} />

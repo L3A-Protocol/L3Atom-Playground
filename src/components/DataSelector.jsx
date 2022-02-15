@@ -39,7 +39,7 @@ const totalSymbolOptions = [
 export default function DataSelector(props) {
 
   return (
-    <div>
+    <div className='select-container'>
       <Typography variant="h6" className="title">
         Select Symbol
       </Typography>

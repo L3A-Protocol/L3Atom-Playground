@@ -10,12 +10,10 @@ import ReactJson from 'react-json-view'
 import LobRatioChart from './components/LobRatioChart';
 import MarketOrderTable from './components/MarketOrderTable';
 
-let l3WebSocket = new WebSocket("ws://194.233.73.249:30205/")
-
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+let l3WebSocket = new WebSocket("ws://194.233.73.248:30205/")
 
 const defaultLineData = {
-  labels,
+  labels: [],
   defaultFontColor: "rgb(255, 255, 255)",
   datasets: [],
 };
@@ -56,12 +54,13 @@ export default function App() {
   const [lobEventCount, setLobEventCount] = useState([0,0,0]);
   const [exchangeChoices, setExchangeChoices] = useState([])
   const [symbolChoices, setSymbolChoices] = useState([])
-  const [lineData, setLineData] = useState([defaultLineData])
-  const [marketOrders, setMarketOrders] = useState([])
+  const [lineData, setLineData] = useState(defaultLineData)
+  const [marketOrders, setMarketOrders] = useState([{}, {}, {}, {}, {}, {}, {}, {}, {}, {}])
   const [message, setMessage] = useState({});
   const [subscribed, setSubscribed] = useState(false);
   const [bestAsk, setBestAsk] = useState(null);
   const [bestBid, setBestBid] = useState(null);
+  const [midPrices, setMidPrices] = useState([])
 
   const handleExchangeChange = (newSelectedOptions) => {
     setExchangeChoices(newSelectedOptions)
@@ -94,6 +93,13 @@ export default function App() {
   }, [subscribed])
 
   useEffect(() => {
+    if (marketOrders.length > 10) {
+      setMarketOrders(marketOrders.slice(0, 10))
+    }
+    console.log(marketOrders)
+  }, [marketOrders])
+
+  useEffect(() => {
     if (!subscribed) {
       return null
     }
@@ -106,7 +112,7 @@ export default function App() {
         side: message.side,
         timestamp: message.timestamp
       }
-      setMarketOrders(marketOrders.length >= 10 ? marketOrders.slice(marketOrders.length - 10).concat(trade) : marketOrders.concat(trade))
+      setMarketOrders(marketOrders.slice(marketOrders.length - 9).concat(trade))
     }
     else {
       let originalLobEventCount = [...lobEventCount]
@@ -123,7 +129,7 @@ export default function App() {
             size: message.size,
             order_id: message.order_id,
           })
-        } else if (message.lob_action == 3) {
+        } else if (message.lob_action == 3 && bestBid) {
           if (message.order_id == -1 && bestBid.price == message.price || message.order_id == bestBid.order_id) {
             setBestBid(null)
             console.log("Cleared best bid")
@@ -136,63 +142,64 @@ export default function App() {
             size: message.size,
             order_id: message.order_id,
           })
-        } else if (message.lob_action == 3) {
+        } else if (message.lob_action == 3 && bestAsk) {
           if (message.order_id == -1 && bestAsk.price == message.price || message.order_id == bestAsk.order_id) {
             setBestAsk(null)
           }
         }
       }
+
+      const now = new Date();
+      bestBid && bestAsk && setMidPrices([...midPrices, [now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds(), (bestBid.price + bestAsk.price) / 2]])
     }
   }, [message])
 
   const unsubscribe = () => {
     const subscribeMessage = {
       'op': 'unsubscribe',
-      "topic": "BTCUSD"
+      "topic": symbolChoices.value
     }
     l3WebSocket.send(JSON.stringify(subscribeMessage))
     setSubscribed(false)
+
+    let newLineData = {}
+
+    const colour = random_rgba()
+    newLineData = Object.assign({}, defaultLineData)
+    newLineData.datasets = [
+      {
+        backgroundColor: colour,
+        data: [],
+        label: symbolChoices.value,
+        borderColor: colour
+      }
+    ]
+    for (const midPrice of midPrices) {
+      newLineData.labels.push(midPrice[0])
+      newLineData.datasets[0].data.push(midPrice[1])
+    }
+    console.log(newLineData)
+    setLineData(newLineData)
+
   }
 
   const subscribe = () => {
-    let newTotalData = []
-    let newLineData = {}
+    
+    setSubscribed(true)
     let subscribeMessage = {
       "op": "subscribe",
-      "topic": "BTCUSD"
+      "topic": symbolChoices.value
     }
-    setSubscribed(true)
     l3WebSocket.send(JSON.stringify(subscribeMessage))
     console.log(subscribeMessage)
     // console.log(symbolChoices[0].value)
-    const colours = exchangeChoices.map(choice => random_rgba())
-    for (let symbol of symbolChoices) {
-      console.log(symbol.value)
-      newLineData = Object.assign({}, defaultLineData)
-      newLineData.datasets = exchangeChoices.map((option, index) => {
-        let res = {
-          symbol: symbol.value,
-          label: option.label,
-          backgroundColor: colours[index],
-          data: []
-        }
-        res.borderColor = res.backgroundColor
-        for (let i = 0; i < 7; i++) {
-          res.data.push(Math.floor(Math.random() * 100))
-        }
-        return res
-      })
-      newTotalData.push(newLineData)
-    }
-    setLineData(newTotalData)
-    console.log(newTotalData)
 }
 
   return (
     <div className="App">
       <Grid container spacing={4} className="data-container">
         <NavBar />
-        <Grid item xs={3.5} className='select-container'>
+        <Grid item xs={5} md={3.5} className='select-container'>
           <DataSelector handleExchangeChange={handleExchangeChange} handleSymbolChange={handleSymbolChange} />
           {/* {console.log(exchangeChoices)} */}
           <Button color="error" variant="contained" onClick={subscribe}>Subscribe</Button>
@@ -207,23 +214,23 @@ export default function App() {
             Best Bid Price: {bestBid ? bestBid.price : "None"}
           </Typography>
           <Typography variant="h5" className="metric">
-            Mid Price: {(bestAsk && bestBid) ? Number(((bestAsk.price + bestBid.price) / 2).toFixed(5)) : "None"}
+            Mid Price: {(bestAsk && bestBid) ? Number(((bestAsk.price + bestBid.price) / 2).toFixed(5)) : "Unable to Calculate"}
           </Typography>
           <Typography variant="h5" className="metric">
-            Order Book Imbalance: {(bestAsk && bestBid) ? Number(((bestBid.size / (bestBid.size + bestAsk.size)).toFixed(5))) : "None"}
+            Order Book Imbalance: {(bestAsk && bestBid) ? Number(((bestBid.size / (bestBid.size + bestAsk.size)).toFixed(5))) : "Unable to Calculate"}
           </Typography>
         </Grid>
-        <Grid item xs={5} className='output-container'>
+        <Grid item xs={6.5} md={4.5} className='output-container'>
           <ReactJson src={subscribed ? (Object.keys(message).length == 22 ? message : blank_lob_data) : blank_lob_data} theme="chalk" style={{padding: "2%", fontSize: "22px"}} />
         </Grid>
-        <Grid item xs={3.5}>
-          <Charts lineData={lineData} marketOrders={marketOrders} lobEventCount={subscribed ? [0,0,0] : lobEventCount} symbolChoices={symbolChoices} />
+        <Grid item xs={6} md={3.75}>
+          <Charts lineData={lineData} lobEventCount={subscribed ? [0,0,0] : lobEventCount} symbolChoices={symbolChoices} />
           <LobRatioChart lobEventCount={subscribed ? [0,0,0] : lobEventCount}/>
         </Grid>
-        <Grid item xs={8}>
-           <MarketOrderTable rows={marketOrders} />
-        </Grid>
         <Grid item xs={4}>
+        </Grid>
+        <Grid item xs={12} md={12} className="market-order-container">
+           <MarketOrderTable rows={marketOrders} />
         </Grid>
       </Grid>
     </div>

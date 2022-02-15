@@ -35,18 +35,17 @@
 
 .line-chart-container {
   background-color: #353a44;
-  margin: 2px;
+  margin-bottom: 2%!important;
   padding: 2%;
-  border-radius: 4%;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 25px 15px 20px 0 rgba(0, 0, 0, 0.59);
+  /* border-radius: 4%; */
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 15px 7px 10px 0 rgba(0, 0, 0, 0.59);
 }
 
 .LOB-ratio-container {
   background-color: #353a44;
-  margin: 2px;
   padding: 2%;
-  border-radius: 4%;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 25px 15px 20px 0 rgba(0, 0, 0, 0.59);
+  /* border-radius: 4%; */
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 15px 7px 10px 0 rgba(0, 0, 0, 0.59);
 }
 
 .logo {
@@ -72,14 +71,17 @@
   /* margin-top: auto;
   margin-bottom: auto; */
   line-height: 2.6;
+  margin-right: 2%!important;
+  background-color: #353a44;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 15px 7px 10px 0 rgba(0, 0, 0, 0.59);
+  padding: 1%!important;
 }
 
 .market-order-container {
-  /* background-color: #353a44;
-  margin: 2px;
-  padding: 2%;
-  border-radius: 4%;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 25px 15px 20px 0 rgba(0, 0, 0, 0.59); */
+  background-color: #353a44;
+  margin-top: 1%!important;
+  padding: 1%;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 15px 7px 10px 0 rgba(0, 0, 0, 0.59);
 }
 
 .market-order-row {
@@ -88,14 +90,20 @@
 }
 
 .output-container {
+  background-color: #353a44;
+  padding: 1%!important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 15px 7px 10px 0 rgba(0, 0, 0, 0.59);
 }
 
 .data-container {
   margin-top: 5%!important;
-  width: 90%!important;
-  margin-left: 5%!important;
-  margin-right: 5%!important;
+  width: 95%!important;
+  margin-left: 2.5%!important;
+  margin-right: 2.5%!important;
   background-color: #282c34;
+  padding: 1%;
+  max-width: 1800px;
+  min-width: 1000px;
 }
 
 .metric {

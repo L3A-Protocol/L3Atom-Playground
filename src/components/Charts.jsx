@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useMemo} from 'react';
+import React from 'react';
 
 import { Line, Pie } from 'react-chartjs-2';
 import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
@@ -66,34 +66,11 @@ const lineOptions = {
 
 export default function Charts(props) {
 
-  const pieData = useMemo(() => {
-    return{
-      labels: ["Inserts", "Deletes",  "Updates"],
-      datasets: [
-        {
-          data: props.lobEventCount,
-          label: '# of events',
-          backgroundColor: [
-            'rgb(255, 99, 132)',
-            'rgb(54, 162, 235)',
-            'rgb(75,192,192)'
-          ]
-        }
-      ]
-    }
-  }, [props.lobEventCount]);
-
   return (
     <div className="charts-container"> 
         <div className="line-chart-container">
-            <Tabs>
-                <TabList>
-                    {props.symbolChoices.map(choice => <Tab>{choice.label}</Tab>)}
-                </TabList>
-                {props.lineData.map(data => <TabPanel><Line data={data} options={lineOptions} /></TabPanel>)}
-            </Tabs>
+            <Line data={props.lineData} options={lineOptions}/>
         </div>
-        
     </div>
   );
 }

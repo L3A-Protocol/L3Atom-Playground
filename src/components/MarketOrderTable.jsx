@@ -28,7 +28,7 @@ export default function MarketOrderTable(props) {
             <TableBody>
                 {props.rows.map(row => {
                     return (
-                        <TableRow key={row.order_id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                        <TableRow key={row.trade_id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                             <TableCell className="market-order-row" component="th" scope="row">
                                 {row.order_id}
                             </TableCell>

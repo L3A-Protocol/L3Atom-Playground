@@ -18,20 +18,11 @@ const exchangeOptions = [
 
 const symbolSpotOptions = [
   { value: 'BTCUSD', label: 'BTC/USD' },
-  { value: 'ETHUSD', label: 'ETH/USD' },
-  { value: 'LTCUSD', label: 'LTC/USD' },
-  { value: 'XRPUSD', label: 'XRP/USD' },
-  { value: 'BTCETH', label: 'BTC/ETH' },
-  { value: 'BTCLTC', label: 'BTC/LTC' }
+  { value: 'BTCUSDT', label: 'BTC/USDT' },
 ]
 
 const symbolFuturesOptions = [
   { value: 'BTCUSD-PERPETUAL', label: 'BTC/USD PERPETUAL' },
-  { value: 'ETHUSD-PERPETUAL', label: 'ETH/USD PERPETUAL' },
-  { value: 'LTCUSD-PERPETUAL', label: 'LTC/USD PERPETUAL' },
-  { value: 'XRPUSD-PERPETUAL', label: 'XRP/USD PERPETUAL' },
-  { value: 'BTCETH-PERPETUAL', label: 'BTC/ETH PERPETUAL' },
-  { value: 'BTCLTC-PERPETUAL', label: 'BTC/LTC PERPETUAL' }
 ]
 
 const totalSymbolOptions = [
@@ -48,15 +39,11 @@ const totalSymbolOptions = [
 export default function DataSelector(props) {
 
   return (
-    <div className="select-container">
+    <div>
       <Typography variant="h6" className="title">
-        Select Exchange(s)
+        Select Symbol
       </Typography>
-      <Select isMulti options={exchangeOptions} onChange={props.handleExchangeChange}/>
-      <Typography variant="h6" className="title">
-        Select Symbol(s)
-      </Typography>
-      <Select options={totalSymbolOptions} onChange={props.handleSymbolChange} isMulti />
+      <Select options={totalSymbolOptions} onChange={props.handleSymbolChange} />
     </div>
   )
 }
